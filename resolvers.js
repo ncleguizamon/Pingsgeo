@@ -6,7 +6,7 @@ const user = {
 }
 
 module.exports = {
-    query: {
+    Query: {
         me: () => user
     }
 }
