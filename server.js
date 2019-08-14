@@ -14,18 +14,21 @@ mongoose.connect(process.env.MONDO_URI, {
 const server = new ApolloServer({
     typeDefs,
     resolvers,
-    context: ({ req }) => {
+    context: async({ req }) => {
         let authToken = null;
+        let currentUser = null;
+
         try {
             authToken = req.headers.authorization;
             if (authToken) {
                 // find on create user
-                findOrCreateUser(authToken);
+                currentUser = await findOrCreateUser(authToken)
             }
 
         } catch (err) {
             console.error(`Unable to authenticate user with token ${authToken}`)
         }
+        return { currentUser }
     }
 });
 
